@@ -551,6 +551,22 @@ describe('MLSearchContext', function () {
       expect( mlSearch.getFacetQuery()['and-query'].queries.length ).toEqual(0);
     });
 
+    it('should get NOT facet query', function() {
+      var mlSearch = factory.newContext();
+      var facetQuery;
+
+      mlSearch.selectFacet('-color', 'red');
+      //and-query.queries[0].['not-query']
+      facetQuery = mlSearch.getFacetQuery()['and-query'].queries[0]['not-query']['range-constraint-query'];
+      expect( facetQuery['constraint-name'] ).toEqual('color');
+      expect( facetQuery.value[0] ).toEqual('red');
+
+      mlSearch.clearAllFacets();
+
+      mlSearch.activeFacets = { color: { values: [] } };
+      expect( mlSearch.getFacetQuery()['and-query'].queries.length ).toEqual(0);
+    });
+
     it('should get/set facet mode', function() {
       var mlSearch = factory.newContext();
       var facetQuery;

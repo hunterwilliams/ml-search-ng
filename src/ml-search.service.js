@@ -599,7 +599,25 @@
       _.forIn( self.activeFacets, function(facet, facetName) {
         if ( facet.values.length ) {
           constraintFn = function(values) {
-            return qb.constraint( facet.type )( facetName, values );
+            var notQuery = false,
+            constrainQuery;
+
+            if (facetName.charAt(0) === '-')
+            {
+              notQuery = true;
+              facetName = facetName.slice(1,facetName.length);
+            }
+            
+            constrainQuery = qb.constraint( facet.type )( facetName, values );
+            
+            if (notQuery)
+            {
+              return qb.not(constrainQuery);
+            }
+            else
+            {
+              return constrainQuery;
+            }
           };
 
           if ( self.options.facetMode === 'or' ) {
