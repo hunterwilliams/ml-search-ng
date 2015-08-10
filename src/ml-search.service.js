@@ -1019,7 +1019,12 @@
      * @return {Object} facet config
      */
     getFacetConfig: function getFacetConfig(name, storedOptions) {
-      var config = null;
+      var config = null,
+        isNegative = name.charAt(0) === '-';
+
+      if (isNegative){
+        name = name.slice(1,name.length);
+      }
 
       if ( !!storedOptions ) {
         config = _.chain( storedOptions.options.constraint )

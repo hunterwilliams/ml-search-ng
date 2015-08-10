@@ -1103,6 +1103,13 @@ describe('MLSearchContext', function () {
       expect(search.getText()).toEqual('hi');
       expect(search.getActiveFacets().color.values[0]).toEqual('blue');
 
+      $location.search({ q: 'hi', f: '-color:blue' });
+      search.fromParams();
+      $httpBackend.flush();
+
+      expect(search.getText()).toEqual('hi');
+      expect(search.getActiveFacets()['-color'].values[0]).toEqual('blue');
+
       $location.search({ q: 'hi' });
       search.fromParams();
       $rootScope.$apply();
